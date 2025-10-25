@@ -1,0 +1,30 @@
+services:
+  app:
+    build: .
+    volumes:
+      - .:/app
+    working_dir: /app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    command: bash
+    stdin_open: true
+    tty: true
+    environment:
+      - DATABASE_HOST=db
+      - DATABASE_NAME=myapp_development
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=postgres_password
+
+  db:
+    image: postgres:16-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: postgres_password
+      POSTGRES_USER: postgres
+      POSTGRES_DB: myapp_development
+
+volumes:
+  postgres_data:
